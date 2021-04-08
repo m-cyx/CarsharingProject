@@ -1,5 +1,6 @@
 from peewee import *
 from connectToDB import *
+import datetime
 
 class Carsharing(BaseModel):
     id_client = AutoField(column_name='ID_Client')
@@ -31,10 +32,10 @@ class Carsharing(BaseModel):
             status=data[7],
             tariff=data[8],
             distance_to_car=data[9],
-            order_date=data[10],
-            trip_start_time=data[11],
-            trip_end_time=data[12],
-            car_number=data[13],
+            order_date=datetime.datetime.now().strftime("%d.%m.%Y"),
+            trip_start_time=data[10],
+            trip_end_time=data[11],
+            car_number=data[12],
         )
         row.save()
 

@@ -1,7 +1,8 @@
-import tkinter as tk
-import tkinter.ttk as ttk
+import tk as tk
+import tk.ttk as ttk
 from time import sleep as sp
 from sys import exit as exx
+from /home/dolph/Документы/GitHub/CarsharingProject/Carsharing/models import *
 class Model:
         """
         Реализация методов класса Model по получению данных с бд, занесению данных в бд,
