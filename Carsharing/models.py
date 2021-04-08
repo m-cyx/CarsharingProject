@@ -2,7 +2,7 @@ from peewee import *
 from connectToDB import *
 import datetime
 
-class Carsharing(BaseModel):
+class Model(BaseModel):
     id_client = AutoField(column_name='ID_Client')
     name = CharField(column_name='Name')
     surname = CharField(column_name='Surname')
@@ -21,28 +21,28 @@ class Carsharing(BaseModel):
 
     #добавление записей в таблицу
     def add_record(self, data):
-        row = Carsharing(
-            name=data[0],
-            surname=data[1],
-            gender=data[2],
-            phone_number=data[3],
-            birth_date=data[4],
-            driver_license_number=data[5],
-            driving_experience=data[6],
-            status=data[7],
-            tariff=data[8],
-            distance_to_car=data[9],
+        row = Model(
+            name=data[0].split()[0],
+            surname=data[0].split()[1],
+            gender=data[1],
+            phone_number=data[2],
+            birth_date=data[3],
+            driver_license_number=data[4],
+            driving_experience=data[5],
+            status=data[6],
+            tariff=data[7],
+            distance_to_car=data[8],
             order_date=datetime.datetime.now().strftime("%d.%m.%Y"),
-            trip_start_time=data[10],
-            trip_end_time=data[11],
-            car_number=data[12],
+            trip_start_time=data[9],
+            trip_end_time=data[10],
+            car_number=data[11],
         )
         row.save()
 
     #Данные получаются в виде списка словарей. Каждый элемент списка - это словарь, в котором ключи - названия полей
     def get_all_dict(self):
         try:
-            result = Carsharing.select()
+            result = Model.select()
         except DoesNotExist as de:
             error_message = "Table does not exist"
             print(error_message)
@@ -72,7 +72,7 @@ class Carsharing(BaseModel):
     #Данные получаются в виде списка кортежей
     def get_all_tuples(self):
         try:
-            result = Carsharing.select()
+            result = Model.select()
         except DoesNotExist as de:
             error_message = "Table does not exist"
             print(error_message)
