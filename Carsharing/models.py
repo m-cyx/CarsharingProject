@@ -2,7 +2,7 @@ from peewee import *
 from connectToDB import *
 import datetime
 
-class Carsharing(BaseModel):
+class Model(BaseModel):
     id_client = AutoField(column_name='ID_Client')
     name = CharField(column_name='Name')
     surname = CharField(column_name='Surname')
@@ -21,7 +21,7 @@ class Carsharing(BaseModel):
 
     #добавление записей в таблицу
     def add_record(self, data):
-        row = Carsharing(
+        row = Model(
             name=data[0].split()[0],
             surname=data[0].split()[1],
             gender=data[1],
@@ -42,7 +42,7 @@ class Carsharing(BaseModel):
     #Данные получаются в виде списка словарей. Каждый элемент списка - это словарь, в котором ключи - названия полей
     def get_all_dict(self):
         try:
-            result = Carsharing.select()
+            result = Model.select()
         except DoesNotExist as de:
             error_message = "Table does not exist"
             print(error_message)
@@ -72,7 +72,7 @@ class Carsharing(BaseModel):
     #Данные получаются в виде списка кортежей
     def get_all_tuples(self):
         try:
-            result = Carsharing.select()
+            result = Model.select()
         except DoesNotExist as de:
             error_message = "Table does not exist"
             print(error_message)

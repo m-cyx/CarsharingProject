@@ -17,7 +17,7 @@ if __name__ == '__main__':
         '23'
     )
 
-    tmp = Carsharing()
+    tmp = Model()
     tmp.add_record(data)
     res = tmp.get_all_tuples()
     print(res)
