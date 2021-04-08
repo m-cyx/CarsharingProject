@@ -1,4 +1,4 @@
-from models import Model
+from Carsharing.models import Model
 from view import View
 
 class Controller:
@@ -19,13 +19,12 @@ class Controller:
         table = Model.get_all_tuples()
         View.create_users_table(table)
 
-    def get_view_data(self):
+    def get_view_data(self): # Обращается за получением данных с View
         return View.return_data_list()
 
 
-    def tool(self):
-        data = Model.get_all_tuples()
-        self.get_view_data(data)
+    def tool(self): 
+        Model.add_record(self.get_view_data())
 
 
 if __name__ == '__main__':
