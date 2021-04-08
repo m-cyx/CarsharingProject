@@ -22,20 +22,20 @@ class Carsharing(BaseModel):
     #добавление записей в таблицу
     def add_record(self, data):
         row = Carsharing(
-            name=data[0],
-            surname=data[1],
-            gender=data[2],
-            phone_number=data[3],
-            birth_date=data[4],
-            driver_license_number=data[5],
-            driving_experience=data[6],
-            status=data[7],
-            tariff=data[8],
-            distance_to_car=data[9],
+            name=data[0].split()[0],
+            surname=data[0].split()[1],
+            gender=data[1],
+            phone_number=data[2],
+            birth_date=data[3],
+            driver_license_number=data[4],
+            driving_experience=data[5],
+            status=data[6],
+            tariff=data[7],
+            distance_to_car=data[8],
             order_date=datetime.datetime.now().strftime("%d.%m.%Y"),
-            trip_start_time=data[10],
-            trip_end_time=data[11],
-            car_number=data[12],
+            trip_start_time=data[9],
+            trip_end_time=data[10],
+            car_number=data[11],
         )
         row.save()
 
