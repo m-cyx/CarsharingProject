@@ -1,5 +1,9 @@
 from Model.models import Model
-from View.view import View
+from menu import Menu
+from intro import Intro
+from table import Table
+from add_user import Add_user
+import tkinter as tk
 
 class Controller: #класс-контроллер, в котором реализованы методы проверки корректности заполненных данных и отправки 'сообщений' определённых задач View или Model
     def __init__(self, root):
@@ -15,11 +19,8 @@ class Controller: #класс-контроллер, в котором реали
     def show_add_user_window(self, event): #метод, который отображает окно для занесения данных
         self.__menu.create_add_user_window()
 
-    def get_view_data(self):
-        return self.__menu.return_data_list()
-
-    def new_record(self):
-        self.__model.add_record(self.get_view_data)
+    def new_record(self, ev, add_user_window):
+        self.__model.add_record(add_user_window.return_data_list())
 
 
 if __name__ == '__main__':
