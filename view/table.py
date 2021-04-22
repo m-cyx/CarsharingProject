@@ -71,6 +71,7 @@ class Table(Data_display): #класс, наследованный от клас
                 style = ttk.Style()
                 style.configure("mystyle.Treeview", highlightthickness = 0, bd = 0)
                 style.layout("mystyle.Treeview", [('mystyle.Treeview.treearea', {'sticky':'nswe'})])
-                self.__tree.insert('', tk.END, iid = self.__iid, text = str(self.__id), values = row)          
-                self.__id += 1
-                self.__iid += 1
+                for row in rows:
+                        self.__tree.insert('', tk.END, iid = self.__iid, text = str(self.__id), values = row)          
+                        self.__id += 1
+                        self.__iid += 1
