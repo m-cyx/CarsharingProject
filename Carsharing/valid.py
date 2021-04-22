@@ -31,12 +31,6 @@ class ValidStr(Validation):
         else:
             return False
 
-class ValidTariff(Validation):
-    def validate(self, data):
-        if ():
-            return True
-        else:
-            return False
 class ValidNumber(Validation):
     def validate(self, data):
         if data.isdigit():
