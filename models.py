@@ -1,8 +1,32 @@
 from peewee import *
 from connectToDB import *
 import datetime
+from valid import *
 
-class Model(BaseModel):
+class myType():
+    def __init__(self, valid: Validation):
+        self.value = None
+        self.valid = valid
+        self.incorrect = True
+
+    def setValid(self, valid: Validation):
+        self.valid = valid
+
+    def set(self, value):
+        if self.valid.validate(self, value):
+            self.value = value
+            self.incorrect = False
+        else:
+            self.incorrect = True
+
+    def getValue(self):
+        return self.value
+
+    def wrongValue(self):
+        return self.incorrect
+
+class Carsharing(BaseModel):
+
     id_client = AutoField(column_name='ID_Client')
     name = CharField(column_name='Name')
     surname = CharField(column_name='Surname')
@@ -19,30 +43,135 @@ class Model(BaseModel):
     trip_end_time = DateField(column_name='TripEndTime', null=True)
     car_number = CharField(column_name='CarNumber')
 
-    #добавление записей в таблицу
+    def check_id(self,id):
+        a = myType(ValidNumber)
+        a.set(id)
+        if a.wrongValue():
+            return False
+        return True
+
+    #Функция проверки данных. Возвращает список проверенных данных либо список данных, не прошедших проверку.
+    def check_data(self, data):
+        a = myType(Validation)
+        res_data = []
+        error_list = []
+
+        tmp = data[0].split()
+        print(tmp)
+        a.setValid(ValidStr)
+        a.set(tmp[0])
+        res_data.append(a.getValue())
+        if a.wrongValue():
+            error_list.append(0)
+
+        a.setValid(ValidStr)
+        a.set(tmp[1])
+        res_data.append(a.getValue())
+        if a.wrongValue():
+            try:
+                error_list.remove(0)
+            except IndexError:
+                pass
+            error_list.append(0)
+
+        a.setValid(Validation)
+        a.set(data[1])
+        res_data.append(a.getValue())
+
+        a.setValid(ValidPhone)
+        a.set(data[2])
+        res_data.append(a.getValue())
+        if a.wrongValue():
+            error_list.append(2)
+
+        a.setValid(ValidDate)
+        a.set(data[3])
+        res_data.append(a.getValue())
+        if a.wrongValue():
+            error_list.append(3)
+
+        a.setValid(ValidIdentify)
+        a.set(data[4])
+        res_data.append(a.getValue())
+        if a.wrongValue():
+            error_list.append(4)
+
+        a.setValid(ValidNumber)
+        a.set(data[5])
+        res_data.append(a.getValue())
+        if a.wrongValue():
+            error_list.append(5)
+
+        a.setValid(Validation)
+        a.set(data[6])
+        res_data.append(a.getValue())
+
+        a.setValid(Validation)
+        a.set(data[7])
+        res_data.append(a.getValue())
+
+
+        a.setValid(ValidFloat)
+        a.set(data[8])
+        res_data.append(a.getValue())
+        if a.wrongValue():
+            error_list.append(8)
+
+        res_data.append(datetime.datetime.now().strftime("%d.%m.%Y"))
+
+        a.setValid(ValidDate)
+        a.set(data[9])
+        res_data.append(a.getValue())
+        if a.wrongValue():
+            error_list.append(9)
+
+        a.setValid(ValidDate)
+        a.set(data[10])
+        res_data.append(a.getValue())
+        if a.wrongValue():
+            error_list.append(10)
+
+        a.setValid(ValidIdentify)
+        a.set(data[11])
+        res_data.append(a.getValue())
+        if a.wrongValue():
+            error_list.append(11)
+
+        if not error_list:
+            return res_data
+        else:
+            return {"error": error_list}
+
+    #добавление записей в таблицу. Возвращает список индексов полей, не прошедших проверку либо None
     def add_record(self, data):
-        row = Model(
-            name=data[0].split()[0],
-            surname=data[0].split()[1],
-            gender=data[1],
-            phone_number=data[2],
-            birth_date=data[3],
-            driver_license_number=data[4],
-            driving_experience=data[5],
-            status=data[6],
-            tariff=data[7],
-            distance_to_car=data[8],
-            order_date=datetime.datetime.now().strftime("%d.%m.%Y"),
-            trip_start_time=data[9],
-            trip_end_time=data[10],
-            car_number=data[11],
-        )
-        row.save()
+        res = self.check_data(data)
+        try:
+            return res["error"]
+        except:
+            data = res
+            row = Carsharing(
+                name=data[0],
+                surname=data[1],
+                gender=data[2],
+                phone_number=data[3],
+                birth_date=data[4],
+                driver_license_number=data[5],
+                driving_experience=data[6],
+                status=data[7],
+                tariff=data[8],
+                distance_to_car=data[9],
+                order_date=data[10],
+                trip_start_time=data[11],
+                trip_end_time=data[12],
+                car_number=data[13],
+            )
+            row.save()
+            return None
 
     #Данные получаются в виде списка словарей. Каждый элемент списка - это словарь, в котором ключи - названия полей
     def get_all_dict(self):
         try:
-            result = Model.select()
+            result = Carsharing.select()
         except DoesNotExist as de:
             error_message = "Table does not exist"
             print(error_message)
@@ -72,7 +201,7 @@ class Model(BaseModel):
     #Данные получаются в виде списка кортежей
     def get_all_tuples(self):
         try:
-            result = Model.select()
+            result = Carsharing.select()
         except DoesNotExist as de:
             error_message = "Table does not exist"
             print(error_message)
@@ -99,36 +228,41 @@ class Model(BaseModel):
             )
         return data
 
-    # #Получить текущий обьект класса
-    # def getCur(self):
-    #     return self.get(self)
-    #
-    # #Получить все обьекты
-    # def getAll(self):
-    #     query = self.select().execute()
-    #
-    # #Функция для добавления ОДНОГО элемента в модель и в базу данных
-    # #На вход подается словарь вида {"field_name":"field_value"}
-    # def insertOne(self, data):
-    #     self.create(data)
-    #
-    # #Функция для добавления МНОГИХ элементов в модель и в базу данных
-    # #На вход подается словарь вида {"field_name":"field_value"}
-    # def insertMany(self, data):
-    #     with db.atomic():
-    #         for every_row in data:
-    #             self.create(**every_row)
-    #
-    # #Заготовка под редактирование. Это еще необходимо
-    # #обкашлять, что именно будем редачить и т.д.
-    # def updateCur(self, data):
-    #     query = self.update().where
-    #     query.execute()
-    #
-    # #Удаление по ID
-    # def deleteByID(self, id):
-    #     tmp = self.get(self.id_client==id)
-    #     tmp.delete_instance()
+    #Редактирование по ID. Возвращает список индексов полей, не прошедших проверку, None, либо 0 в случае некорректного айди
+    def change_record(self, data, id):
+        if not self.check_id(id):
+            return 0
+        res = self.check_data(data)
+        try:
+            return res["error"]
+        except:
+            data = res
+            change = {
+                Carsharing.name: data[0],
+                Carsharing.surname: data[1],
+                Carsharing.gender: data[2],
+                Carsharing.phone_number: data[3],
+                Carsharing.birth_date: data[4],
+                Carsharing.driver_license_number: data[5],
+                Carsharing.driving_experience: data[6],
+                Carsharing.status: data[7],
+                Carsharing.tariff: data[8],
+                Carsharing.distance_to_car: data[9],
+                Carsharing.order_date: data[10],
+                Carsharing.trip_start_time: data[11],
+                Carsharing.trip_end_time: data[12],
+                Carsharing.car_number: data[13]
+            }
+            query = Carsharing.update(change).where(Carsharing.id_client == id)
+            query.execute()
+            return None
+
+    #Удаление по ID. Возвращает 0 в случае некорректного айди
+    def delete_by_id(self, id):
+        if not self.check_id(id):
+            return 0
+        query = Carsharing.delete().where(Carsharing.id_client == id)
+        query.execute()
 
     class Meta:
         table_name = 'carsharing'
