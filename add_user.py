@@ -1,3 +1,6 @@
+import tkinter as tk
+from PIL import Image, ImageTk
+from os import listdir
 class Add_user: #класс, инициализирующий окно для добавления пользователя в базу данных и методы взаимодействия с ним
         def __init__(self, master, menu, controller):
                 self.__master = master
