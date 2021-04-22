@@ -1,8 +1,32 @@
 from peewee import *
 from connectToDB import *
 import datetime
+from valid import *
 
-class Model(BaseModel):
+class myType():
+    def __init__(self, valid: Validation):
+        self.value = None
+        self.valid = valid
+        self.incorrect = True
+
+    def setValid(self, valid: Validation):
+        self.valid = valid
+
+    def set(self, value):
+        if self.valid.validate(self, value):
+            self.value = value
+            self.incorrect = False
+        else:
+            self.incorrect = True
+
+    def getValue(self):
+        return self.value
+
+    def wrongValue(self):
+        return self.incorrect
+
+class Carsharing(BaseModel):
+
     id_client = AutoField(column_name='ID_Client')
     name = CharField(column_name='Name')
     surname = CharField(column_name='Surname')
@@ -19,30 +43,122 @@ class Model(BaseModel):
     trip_end_time = DateField(column_name='TripEndTime', null=True)
     car_number = CharField(column_name='CarNumber')
 
+    def check_data(self, data):
+        a = myType(Validation)
+        res_data = []
+
+        tmp = data[0].split()
+        print(tmp)
+        a.setValid(ValidStr)
+        a.set(tmp[0])
+        res_data.append(a.getValue())
+        if a.wrongValue():
+            print("error")
+
+        a.setValid(ValidStr)
+        a.set(tmp[1])
+        res_data.append(a.getValue())
+        if a.wrongValue():
+            print("error")
+
+        a.setValid(ValidStr)
+        a.set(data[1])
+        res_data.append(a.getValue())
+        if a.wrongValue():
+            print("error")
+
+        a.setValid(ValidPhone)
+        a.set(data[2])
+        res_data.append(a.getValue())
+        if a.wrongValue():
+            print("error")
+
+        a.setValid(ValidDate)
+        a.set(data[3])
+        res_data.append(a.getValue())
+        if a.wrongValue():
+            print("error")
+
+        a.setValid(ValidIdentify)
+        a.set(data[4])
+        res_data.append(a.getValue())
+        if a.wrongValue():
+            print("error")
+
+        a.setValid(ValidNumber)
+        a.set(data[5])
+        res_data.append(a.getValue())
+        if a.wrongValue():
+            print("error")
+
+#?
+        a.setValid(ValidStr)
+        a.set(data[6])
+        res_data.append(a.getValue())
+        if a.wrongValue():
+            print("error")
+#?
+        a.setValid(ValidTariff)
+        a.set(data[7])
+        res_data.append(a.getValue())
+        if a.wrongValue():
+            print("error")
+
+        a.setValid(ValidFloat)
+        a.set(data[8])
+        res_data.append(a.getValue())
+        if a.wrongValue():
+            print("error")
+
+        res_data.append(datetime.datetime.now().strftime("%d.%m.%Y"))
+
+        a.setValid(ValidDate)
+        a.set(data[9])
+        res_data.append(a.getValue())
+        if a.wrongValue():
+            print("error")
+
+        a.setValid(ValidDate)
+        a.set(data[10])
+        res_data.append(a.getValue())
+        if a.wrongValue():
+            print("error")
+
+        a.setValid(ValidIdentify)
+        a.set(data[11])
+        res_data.append(a.getValue())
+        if a.wrongValue():
+            print("error")
+
+        for el in range(len(data)):
+            print(data[el], " - ", res_data[el])
+        return res_data
+
     #добавление записей в таблицу
     def add_record(self, data):
-        row = Model(
-            name=data[0].split()[0],
-            surname=data[0].split()[1],
-            gender=data[1],
-            phone_number=data[2],
-            birth_date=data[3],
-            driver_license_number=data[4],
-            driving_experience=data[5],
-            status=data[6],
-            tariff=data[7],
-            distance_to_car=data[8],
-            order_date=datetime.datetime.now().strftime("%d.%m.%Y"),
-            trip_start_time=data[9],
-            trip_end_time=data[10],
-            car_number=data[11],
+        data = self.check_data(data)
+        row = Carsharing(
+            name=data[0],
+            surname=data[1],
+            gender=data[2],
+            phone_number=data[3],
+            birth_date=data[4],
+            driver_license_number=data[5],
+            driving_experience=data[6],
+            status=data[7],
+            tariff=data[8],
+            distance_to_car=data[9],
+            order_date=data[10],
+            trip_start_time=data[11],
+            trip_end_time=data[12],
+            car_number=data[13],
         )
         row.save()
 
     #Данные получаются в виде списка словарей. Каждый элемент списка - это словарь, в котором ключи - названия полей
     def get_all_dict(self):
         try:
-            result = Model.select()
+            result = Carsharing.select()
         except DoesNotExist as de:
             error_message = "Table does not exist"
             print(error_message)
@@ -72,7 +188,7 @@ class Model(BaseModel):
     #Данные получаются в виде списка кортежей
     def get_all_tuples(self):
         try:
-            result = Model.select()
+            result = Carsharing.select()
         except DoesNotExist as de:
             error_message = "Table does not exist"
             print(error_message)
