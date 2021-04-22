@@ -1,3 +1,4 @@
+import tkinter as tk
 class Intro: #класс, инициализирующий окно заставки и методы взаимодействия с ним
         def __init__(self, master):
                 self.__master = master
