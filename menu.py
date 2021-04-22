@@ -1,3 +1,7 @@
+import tkinter as tk
+from sys import exit as exx
+from table import Table
+from add_user import Add_user
 class Menu: #класс, инициализирующий окно меню и содержащий методы взаимодействия с ним
         def __init__(self, controller, master, delay):
                 self.__number = 0

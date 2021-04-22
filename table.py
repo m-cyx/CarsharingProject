@@ -1,3 +1,5 @@
+import tkinter.ttk as ttk
+import tkinter as tk
 class Data_display: #класс, инициализирующий окно отображения информации из базы данных и содержащий методы взаимодействия с ним
         def __init__(self, master, menu = None):
                 self.__master = master
@@ -35,21 +37,21 @@ class Table(Data_display): #класс, наследованный от клас
                 self.__tree.heading('#12', text = 'TripStartTime')
                 self.__tree.heading('#13', text = 'TripEndTime')
                 self.__tree.heading('#14', text = 'CarNumber')
-                self.__tree.column('#0', stretch = tk.YES)
-                self.__tree.column('#1', stretch = tk.YES)
-                self.__tree.column('#2', stretch = tk.YES)
-                self.__tree.column('#3', stretch = tk.YES)
-                self.__tree.column('#4', stretch = tk.YES)
-                self.__tree.column('#5', stretch = tk.YES)
-                self.__tree.column('#6', stretch = tk.YES)
-                self.__tree.column('#7', stretch = tk.YES)
-                self.__tree.column('#8', stretch = tk.YES)
-                self.__tree.column('#9', stretch = tk.YES)
-                self.__tree.column('#10', stretch = tk.YES)
-                self.__tree.column('#11', stretch = tk.YES)
-                self.__tree.column('#12', stretch = tk.YES)
-                self.__tree.column('#13', stretch = tk.YES)
-                self.__tree.column('#14', stretch = tk.YES)
+                self.__tree.column('#0', stretch = tk.NO, width = 40)
+                self.__tree.column('#1', stretch = tk.NO, width = 100)
+                self.__tree.column('#2', stretch = tk.NO, width = 130)
+                self.__tree.column('#3', stretch = tk.NO, width = 60)
+                self.__tree.column('#4', stretch = tk.NO, width = 90)
+                self.__tree.column('#5', stretch = tk.NO, width = 65)
+                self.__tree.column('#6', stretch = tk.NO, width = 126)
+                self.__tree.column('#7', stretch = tk.NO, width = 105)
+                self.__tree.column('#8', stretch = tk.NO, width = 120)
+                self.__tree.column('#9', stretch = tk.NO, width = 140)
+                self.__tree.column('#10', stretch = tk.NO, width = 90)
+                self.__tree.column('#11', stretch = tk.NO,width = 66)
+                self.__tree.column('#12', stretch = tk.NO, width = 80)
+                self.__tree.column('#13', stretch = tk.NO, width = 80)
+                self.__tree.column('#14', stretch = tk.NO, width = 80)
                 self.__id = 0
                 self.__iid = 0
                 self.__scrolltabley = tk.Scrollbar(self._Data_display__master, command = self.__tree.yview)
@@ -66,7 +68,9 @@ class Table(Data_display): #класс, наследованный от клас
                 self.__tree.focus_force()
                 
         def insert_values(self, rows): #метод, добавляющий данные в таблицу
-                for row in rows:
-                        self.__tree.insert('', tk.END, iid = self.__iid, text = str(self.__id), values = row)
-                        self.__id += 1
-                        self.__iid += 1
+                style = ttk.Style()
+                style.configure("mystyle.Treeview", highlightthickness = 0, bd = 0)
+                style.layout("mystyle.Treeview", [('mystyle.Treeview.treearea', {'sticky':'nswe'})])
+                self.__tree.insert('', tk.END, iid = self.__iid, text = str(self.__id), values = row)          
+                self.__id += 1
+                self.__iid += 1
