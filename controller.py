@@ -1,33 +1,23 @@
-from Carsharing.models import Model
-from view import View
+import sys
+import os
+sys.path.append(os.path.join(r'C:\Users\User\Desktop\CARSHARING', r'C:\Users\User\Desktop\CARSHARING\view'))
+sys.path.append(os.path.join(r'C:\Users\User\Desktop\CARSHARING', r'C:\Users\User\Desktop\CARSHARING\model'))
+from menu import Menu
+from models import Model
 
-class Controller:
-    def __init__(self):
-        self.model = Model()
-        self.view = View(self)
+class Controller: #класс-контроллер, в котором реализованы методы проверки корректности заполненных данных и отправки 'сообщений' определённых задач View или Model
+        def __init__(self, root):
+                self.__menu = Menu(self, root, True)
+                self.__model = Model()
 
+        def get_users_table(self): #метод, отправляющий 'сообщение' Model, чтобы тот отправил информацию из базы данных классу-контроллеру
+                return self.__model.get_all_tuples()
 
-    def main(self):
-        print('это мейн контроллера')
-        self.view.main()
+        def get_records(self, event): #метод, отправляющий 'сообщение' View, чтобы тот вывел информацию о пользователях на экран
+                self.__menu.create_users_table(self.get_users_table())
 
-    def new_record(self): # Создание новой записи. Получает данные с View и отдаёт Model
-        data = View.create_add_user_window()
-        Model.add_record(data)
+        def show_add_user_window(self, event): #метод, который отображает окно для занесения данных
+                self.__menu.create_add_user_window()
 
-    def get_records(self): # Получение всех пользователей. Получает с Model пользователей и отдаёт View
-        table = Model.get_all_tuples()
-        View.create_users_table(table)
-
-    def get_view_data(self): # Обращается за получением данных с View
-        return View.return_data_list()
-
-
-    def tool(self): 
-        Model.add_record(self.get_view_data())
-
-
-if __name__ == '__main__':
-    carsharing = Controller()
-    carsharing.mainloop()
-    
+        def new_record(self, add_user_window):
+                self.__model.add_record(add_user_window.return_data_list())
