@@ -248,7 +248,7 @@ class Carsharing(BaseModel):
                 Carsharing.status: data[7],
                 Carsharing.tariff: data[8],
                 Carsharing.distance_to_car: data[9],
-                Carsharing.order_date: data[10],
+                #Carsharing.order_date: data[10],
                 Carsharing.trip_start_time: data[11],
                 Carsharing.trip_end_time: data[12],
                 Carsharing.car_number: data[13]
