@@ -153,8 +153,8 @@ class Menu: #класс, инициализирующий окно меню и �
                 self.__number = 0
                 wind = tk.Toplevel()
                 wind.configure(bd = 0)
-                delete_user_window = Editing_user(wind)
-                delete_user_window.focus_force()
+                editing_user_window = Editing_user(wind, self, self.__controller)
+                editing_user_window.focus_force()
 
         def __editing_user_data_label_leave(self, event = None): #метод, изменяющий дизайн надписи РЕДАКТИРОВАТЬ ДАННЫЕ О КЛИЕНТЕ в исходное состояние при покидании надписи курсором мыши
                 self.__editing_user_data_label.place_forget()
